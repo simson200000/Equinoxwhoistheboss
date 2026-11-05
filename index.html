@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intergalactic Ad Pitch – Round 1 Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ============ Theme (matches the Canva deck) ============ */
+  :root{
+    --deep:#12061f; --purple:#2a0d3d; --plum:#4a1a5e;
+    --acc:#4d8dff; --ice:#e6dcf5; --muted:#b9a8cf; --white:#ffffff;
+    --card:rgba(18,6,31,.72); --line:rgba(255,255,255,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:Jost,"Futura","Century Gothic",system-ui,sans-serif;color:var(--white);
+    background:linear-gradient(180deg,#0d0418 0%,#1f0a30 45%,#3b1250 100%) fixed;
+    min-height:100vh;overflow-x:hidden;
+  }
+  /* starfield */
+  .stars,.stars2{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .stars{background-image:
+    radial-gradient(1px 1px at 8% 12%,#fff,transparent),radial-gradient(1px 1px at 23% 47%,#fffc,transparent),
+    radial-gradient(1.5px 1.5px at 41% 21%,#fff,transparent),radial-gradient(1px 1px at 57% 64%,#fffb,transparent),
+    radial-gradient(1px 1px at 69% 9%,#fff,transparent),radial-gradient(1.5px 1.5px at 83% 38%,#fffd,transparent),
+    radial-gradient(1px 1px at 94% 72%,#fff,transparent),radial-gradient(1px 1px at 14% 83%,#fffa,transparent),
+    radial-gradient(1px 1px at 36% 91%,#fff,transparent),radial-gradient(1.5px 1.5px at 75% 88%,#fffc,transparent),
+    radial-gradient(1px 1px at 51% 35%,#fff9,transparent),radial-gradient(1px 1px at 3% 55%,#fff,transparent);
+    background-size:420px 420px}
+  .stars2{background-image:
+    radial-gradient(1px 1px at 18% 28%,#fff8,transparent),radial-gradient(1px 1px at 62% 14%,#fff9,transparent),
+    radial-gradient(1px 1px at 88% 58%,#fff7,transparent),radial-gradient(1px 1px at 33% 72%,#fff8,transparent),
+    radial-gradient(1px 1px at 47% 52%,#fff6,transparent),radial-gradient(1px 1px at 79% 25%,#fff7,transparent);
+    background-size:260px 260px}
+  /* moon (top-right) and earth (bottom-left), drawn in CSS */
+  .moon,.earth{position:fixed;border-radius:50%;z-index:0;pointer-events:none}
+  .moon{width:min(46vw,520px);aspect-ratio:1;top:calc(min(46vw,520px)*-.38);right:calc(min(46vw,520px)*-.12);
+    background:
+      radial-gradient(circle at 30% 35%,#0000 0 9%,#5d5d5d55 10% 13%,#0000 14%),
+      radial-gradient(circle at 62% 58%,#0000 0 12%,#4a4a4a66 13% 17%,#0000 18%),
+      radial-gradient(circle at 48% 78%,#0000 0 6%,#55555566 7% 9%,#0000 10%),
+      radial-gradient(ellipse at 40% 45%,#6e6e6e 0 22%,transparent 40%),
+      radial-gradient(circle at 35% 30%,#d8d8d8,#9a9a9a 45%,#4d4d4d 75%,#222 100%);
+    box-shadow:inset -30px -40px 80px #000a,0 0 60px #ffffff10}
+  .earth{width:min(40vw,440px);aspect-ratio:1;bottom:calc(min(40vw,440px)*-.45);left:calc(min(40vw,440px)*-.1);
+    background:
+      radial-gradient(ellipse at 30% 30%,#ffffffcc 0 6%,transparent 14%),
+      radial-gradient(ellipse at 60% 40%,#ffffffaa 0 8%,transparent 18%),
+      radial-gradient(ellipse at 45% 65%,#ffffffbb 0 7%,transparent 16%),
+      radial-gradient(ellipse at 75% 70%,#ffffff99 0 5%,transparent 12%),
+      radial-gradient(circle at 40% 35%,#cfcfcf,#7a7a7a 40%,#2c2c2c 75%,#0d0d0d 100%);
+    box-shadow:inset -25px -30px 70px #000b}
+  /* thin white frame, like the slides */
+  .frame{position:fixed;inset:22px;border:1.5px solid rgba(255,255,255,.65);z-index:1;pointer-events:none}
+  @media (max-width:560px){.frame{inset:10px}}
+
+  .page{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:56px 24px}
+  .wrap{width:100%;max-width:640px}
+  .eyebrow{font-size:13px;font-weight:600;letter-spacing:.32em;color:var(--acc);text-transform:uppercase}
+  h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(46px,10vw,78px);line-height:1.02;margin:12px 0 10px;letter-spacing:.005em}
+  h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(24px,5.2vw,34px);line-height:1.2;margin-bottom:22px;letter-spacing:.01em}
+  .sub{color:var(--ice);font-size:17px;line-height:1.55}
+  .sub b{color:#fff}
+  .card{background:var(--card);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:4px;padding:30px;margin-top:26px}
+  label{display:block;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+  input{width:100%;padding:15px 16px;border-radius:2px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.35);color:#fff;font:inherit;font-size:18px;outline:none;transition:border-color .15s}
+  input:focus{border-color:#fff}
+  input::placeholder{color:#9b8bb3}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:22px;padding:16px 18px;border:1.5px solid #fff;border-radius:2px;background:#fff;color:#1a0828;font:inherit;font-weight:700;font-size:16px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .15s,color .15s}
+  .btn:hover{background:transparent;color:#fff}
+  .btn:disabled{background:transparent;border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.35);cursor:not-allowed}
+  .btn.ghost{background:transparent;color:#fff}
+  .btn.ghost:hover{background:#fff;color:#1a0828}
+  .note{font-size:14px;color:var(--muted);margin-top:16px;line-height:1.5}
+  .err{color:#ff8f9a;font-size:14px;margin-top:12px;min-height:20px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px;color:var(--ice);letter-spacing:.08em}
+  .team-pill{border:1px solid rgba(255,255,255,.4);padding:6px 14px;font-weight:600;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bar{height:4px;background:rgba(255,255,255,.12);overflow:hidden;margin:14px 0 4px}
+  .bar i{display:block;height:100%;background:var(--acc);transition:width .3s}
+  .opts{display:grid;gap:10px}
+  .opt-btn{display:flex;gap:14px;align-items:center;text-align:left;width:100%;padding:15px 16px;border-radius:2px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.3);color:#fff;font:inherit;font-size:16px;line-height:1.4;cursor:pointer;transition:border-color .12s,background .12s}
+  .opt-btn:hover{border-color:rgba(255,255,255,.6)}
+  .opt-btn .k{flex:none;width:32px;height:32px;border:1px solid rgba(255,255,255,.45);display:grid;place-items:center;font-family:Anton,Impact,sans-serif;font-size:15px;color:var(--ice)}
+  .opt-btn.sel{border-color:var(--acc);background:rgba(77,141,255,.16)}
+  .opt-btn.sel .k{background:var(--acc);border-color:var(--acc);color:#fff}
+  .big{font-family:Anton,Impact,sans-serif;font-size:clamp(84px,22vw,140px);line-height:1;margin:10px 0 2px}
+  .center{text-align:center}
+  .hidden{display:none !important}
+  .spinner{width:18px;height:18px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .org{background:none;border:0;color:rgba(255,255,255,.35);font:inherit;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-top:26px;cursor:pointer}
+  .org:hover{color:#fff}
+  .modal{position:fixed;inset:0;background:rgba(5,0,12,.85);display:flex;align-items:center;justify-content:center;padding:20px;z-index:10}
+  .modal .card{max-width:420px;width:100%;margin:0}
+  @media (max-width:560px){.card{padding:22px}.sub{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="stars"></div><div class="stars2"></div>
+<div class="moon"></div><div class="earth"></div>
+<div class="frame"></div>
+
+<main class="page"><div class="wrap">
+
+  <!-- ===== TEAM NAME ===== -->
+  <section id="v-team">
+    <div class="eyebrow">Round 01</div>
+    <h1>Quiz &amp; Auction Round</h1>
+    <p class="sub">20 business questions. Every correct answer earns your team <b>100 points</b>, up to <b>2,000</b>.</p>
+    <form class="card" id="teamForm" autocomplete="off">
+      <label for="teamName">Team name</label>
+      <input id="teamName" maxlength="40" required placeholder="e.g. Team Nebula">
+      <div class="err" id="teamErr"></div>
+      <button class="btn" type="submit" id="startBtn">Start quiz</button>
+      <p class="note">Your team name can only be entered once. Answers lock when you press Next, so you can't go back or retake the quiz.</p>
+    </form>
+  </section>
+
+  <!-- ===== QUESTIONS ===== -->
+  <section id="v-quiz" class="hidden">
+    <div class="top">
+      <span id="qCount">QUESTION 1 / 20</span>
+      <span class="team-pill" id="teamPill"></span>
+    </div>
+    <div class="bar"><i id="barFill" style="width:0%"></i></div>
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:12px">100 points</div>
+      <h2 id="qText"></h2>
+      <div class="opts" id="opts"></div>
+      <div class="err" id="quizErr"></div>
+      <button class="btn" id="nextBtn" disabled>Lock answer &amp; next</button>
+    </div>
+  </section>
+
+  <!-- ===== RESULT ===== -->
+  <section id="v-done" class="hidden center">
+    <div class="eyebrow">Quiz complete</div>
+    <h1 id="doneTeam"></h1>
+    <div class="card">
+      <div class="sub">Your team scored</div>
+      <div class="big" id="doneScore">0</div>
+      <div class="sub">out of 2,000 points</div>
+      <div class="sub" style="margin-top:14px"><b id="doneCorrect">0</b> out of 20 correct</div>
+      <p class="note">Your score has been sent to the organisers.</p>
+    </div>
+    <button class="org" id="orgBtn">Organiser reset</button>
+  </section>
+
+</div></main>
+
+<!-- ===== ORGANISER RESET ===== -->
+<div class="modal hidden" id="orgModal">
+  <form class="card" id="orgForm">
+    <h2 style="margin-bottom:8px">Organiser reset</h2>
+    <p class="note" style="margin-top:0;margin-bottom:18px">Clears this device so another team can play.</p>
+    <label for="pin">Organiser PIN</label>
+    <input id="pin" type="password" inputmode="numeric" maxlength="10">
+    <div class="err" id="pinErr"></div>
+    <button class="btn" type="submit">Reset device</button>
+    <button class="btn ghost" type="button" id="orgCancel" style="margin-top:10px">Cancel</button>
+  </form>
+</div>
+
+<script>
+/* ================================================================
+   SETUP: paste your Google Apps Script web-app URL between the quotes.
+   (See README.md: the answer key lives in the Apps Script, not here,
+   so scores can't be faked with inspect element.)
+   ================================================================ */
+const SCRIPT_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+/* Questions only. There is no answer key in this file on purpose. */
+const QUESTIONS = [
+  {q:"A product costs ₹350 to make and sells for ₹500. What is the profit as a percentage of the selling price?", o:["42.9%","30%","15%","70%"]},
+  {q:"A bakery has fixed costs of ₹20,000 a month. Each cake sells for ₹500 and costs ₹300 to make. How many cakes must it sell to break even?", o:["40","67","200","100"]},
+  {q:"Which function of management compares actual performance with the planned targets?", o:["Controlling","Organising","Staffing","Planning"]},
+  {q:"“An employee should receive orders from only one boss.” Which of Fayol’s principles is this?", o:["Unity of direction","Unity of command","Scalar chain","Centralisation"]},
+  {q:"If the RBI increases the repo rate, what usually happens next?", o:["Loans become cheaper","Shares are issued","Loans become more expensive","Taxes are cut"]},
+  {q:"When a company sells its shares to the public for the very first time, it is called a/an…", o:["IPO","FPO","Rights issue","Bonus issue"]},
+  {q:"Which of these is NOT allowed for a private company in India?", o:["Having just 2 members","Restricting the transfer of its shares","Inviting the public to buy its shares","Having up to 200 members"]},
+  {q:"In Maslow’s hierarchy of needs, which need sits at the very top?", o:["Safety","Esteem","Social","Self-actualisation"]},
+  {q:"A new brand launches at a very low price to grab market share quickly. This pricing strategy is called…", o:["Penetration pricing","Price skimming","Premium pricing","Cost-plus pricing"]},
+  {q:"A phone launches at a high price and the price is lowered a few months later. This is…", o:["Penetration pricing","Psychological pricing","Price skimming","Bundle pricing"]},
+  {q:"Inflation means…", o:["A fall in the general price level","A rise in the general price level, so money buys less","A rise in a country’s exports","An increase in the number of banks"]},
+  {q:"Which of these is a public sector enterprise?", o:["Infosys","Reliance Industries","Tata Motors","Indian Railways"]},
+  {q:"A shop sells you an expired product and refuses to replace it. Where can you file a complaint?", o:["Consumer Disputes Redressal Commission","SEBI","RBI","Election Commission"]},
+  {q:"Working capital is calculated as…", o:["Total assets − Total liabilities","Current assets − Current liabilities","Revenue − Expenses","Fixed assets + Current assets"]},
+  {q:"Demand for a product is “elastic” when…", o:["Price changes have no effect on demand","Demand stays fixed","Only supply changes","A small price change causes a big change in demand"]},
+  {q:"Which source of finance does NOT have to be repaid by the company?", o:["Equity shares","Debentures","Bank loan","Trade credit"]},
+  {q:"Which element of the marketing mix decides where and how a product reaches the customer?", o:["Product","Price","Place","Promotion"]},
+  {q:"Which of these is a NON-monetary incentive for employees?", o:["Bonus","Recognition and job enrichment","Profit sharing","Sales commission"]},
+  {q:"GDP measures…", o:["The total value of final goods and services produced in a country in a year","The total money held by the RBI","The total taxes the government collects","The total value of a country’s exports"]},
+  {q:"₹10,000 is invested at 10% simple interest per year. How much interest is earned after 3 years?", o:["₹1,000","₹3,310","₹3,000","₹13,000"]},
+];
+const PIN_HASH = "3fd9cf6fd262570bbb23348a79f1cf14b8ab952b0c5dd3cfd71f04b510bbe669";
+const STORE = "iap-r1-quiz";
+const $ = id => document.getElementById(id);
+
+/* ---------- local state (stops refresh/restart on this device) ---------- */
+const fresh = () => ({ stage:"team", team:null, token:null, idx:0, answers:[], result:null });
+let S = fresh();
+try { const r = localStorage.getItem(STORE); if (r) S = Object.assign(fresh(), JSON.parse(r)); } catch(e) {}
+const save = () => { try { localStorage.setItem(STORE, JSON.stringify(S)); } catch(e) {} };
+
+async function api(payload){
+  if (!SCRIPT_URL || SCRIPT_URL.startsWith("PASTE_")) throw new Error("The quiz isn't connected yet. Ask an organiser.");
+  const res = await fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify(payload) }); // text/plain: no CORS preflight
+  if (!res.ok) throw new Error("Network error. Please try again.");
+  return res.json();
+}
+function busy(btn, on, label){
+  btn.disabled = on;
+  btn.innerHTML = on ? '<span class="spinner"></span>' : label;
+}
+function show(v){ ["v-team","v-quiz","v-done"].forEach(x => $(x).classList.toggle("hidden", x !== v)); window.scrollTo(0,0); }
+
+/* ---------- 1. team name ---------- */
+$("teamForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (S.stage !== "team") return;
+  const name = $("teamName").value.trim().replace(/\s+/g," ");
+  if (name.length < 2){ $("teamErr").textContent = "Enter your team name."; return; }
+  $("teamErr").textContent = "";
+  busy($("startBtn"), true);
+  try {
+    const r = await api({ action:"register", team:name });
+    if (!r.ok) throw new Error(r.error === "taken" ? "That team name is already taken." : (r.error || "Something went wrong."));
+    S.team = name; S.token = r.token; S.stage = "quiz"; S.idx = 0; S.answers = [];
+    save(); render();
+  } catch(err) {
+    $("teamErr").textContent = err.message;
+  } finally { busy($("startBtn"), false, "Start quiz"); }
+});
+
+/* ---------- 2. questions ---------- */
+let picked = null;
+function renderQ(){
+  const q = QUESTIONS[S.idx]; picked = null;
+  $("qCount").textContent = `QUESTION ${S.idx+1} / ${QUESTIONS.length}`;
+  $("teamPill").textContent = S.team;
+  $("barFill").style.width = (S.idx / QUESTIONS.length * 100) + "%";
+  $("qText").textContent = q.q;
+  $("quizErr").textContent = "";
+  const box = $("opts"); box.innerHTML = "";
+  q.o.forEach((t,i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "opt-btn";
+    b.innerHTML = `<span class="k">${"ABCD"[i]}</span><span></span>`;
+    b.lastChild.textContent = t;
+    b.onclick = () => { picked = i; [...box.children].forEach((c,j) => c.classList.toggle("sel", j === i)); $("nextBtn").disabled = false; };
+    box.appendChild(b);
+  });
+  $("nextBtn").disabled = true;
+  $("nextBtn").innerHTML = S.idx === QUESTIONS.length-1 ? "Lock answer &amp; finish" : "Lock answer &amp; next";
+}
+$("nextBtn").addEventListener("click", async () => {
+  if (picked === null && S.answers.length < QUESTIONS.length) return;
+  if (S.answers.length < QUESTIONS.length){ S.answers[S.idx] = picked; save(); }
+  if (S.idx < QUESTIONS.length-1){ S.idx++; save(); renderQ(); return; }
+  await submit();
+});
+async function submit(){
+  const btn = $("nextBtn");
+  busy(btn, true);
+  try {
+    const r = await api({ action:"submit", token:S.token, answers:S.answers });
+    if (!r.ok) throw new Error(r.error || "Couldn't submit.");
+    S.result = { score:r.score, correct:r.correct }; S.stage = "done";
+    save(); render();
+  } catch(err) {
+    $("quizErr").textContent = err.message + " Your answers are saved, so tap the button to try again.";
+    btn.disabled = false; btn.innerHTML = "Retry submitting";
+  }
+}
+
+/* ---------- 3. result (score comes from the server) ---------- */
+function renderDone(){
+  $("doneTeam").textContent = S.team;
+  $("doneScore").textContent = Number(S.result.score).toLocaleString("en-IN");
+  $("doneCorrect").textContent = S.result.correct;
+}
+
+function render(){
+  if (S.stage === "quiz" && S.token){
+    show("v-quiz"); renderQ();
+    if (S.answers.length >= QUESTIONS.length){ // all answered but submit failed earlier
+      $("quizErr").textContent = "Your answers are saved. Tap the button to submit them.";
+      $("nextBtn").disabled = false; $("nextBtn").innerHTML = "Submit answers";
+    }
+  }
+  else if (S.stage === "done" && S.result){ show("v-done"); renderDone(); }
+  else { S = fresh(); show("v-team"); }
+}
+
+/* ---------- organiser reset (PIN stored only as a hash) ---------- */
+async function sha256(t){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+}
+$("orgBtn").onclick = () => { $("pin").value = ""; $("pinErr").textContent = ""; $("orgModal").classList.remove("hidden"); $("pin").focus(); };
+$("orgCancel").onclick = () => $("orgModal").classList.add("hidden");
+$("orgForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const pin = $("pin").value.replace(/\D/g,"");
+  let ok = false;
+  try { ok = (await sha256(pin)) === PIN_HASH; } catch(err) { $("pinErr").textContent = "Open the quiz over https to use reset."; return; }
+  if (!ok){ $("pinErr").textContent = "Wrong PIN."; return; }
+  try { localStorage.removeItem(STORE); } catch(err) {}
+  S = fresh(); $("teamForm").reset(); $("orgModal").classList.add("hidden"); render();
+});
+
+render();
+</script>
+</body>
+</html>
